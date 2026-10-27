@@ -1,4 +1,4 @@
-name: Python CI
+name: Python CI and Docker Publish
 
 on:
   push:
@@ -6,8 +6,12 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
-  test:
+  test-and-publish:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,5 +29,19 @@ jobs:
       - name: Run automated tests
         run: python -m unittest -v test_app
 
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker image
-        run: docker build -t deployment-demo:ci .
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name == 'push' }}
+          tags: |
+            ghcr.io/rsingh230105/deployment-demo:latest
+            ghcr.io/rsingh230105/deployment-demo:${{ github.sha }}
