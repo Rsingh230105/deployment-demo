@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  syntax-check:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,3 +21,6 @@ jobs:
 
       - name: Check Python syntax
         run: python -m py_compile app.py
+
+      - name: Run automated tests
+        run: python -m unittest -v test_app

@@ -21,7 +21,11 @@ class AppHandler(BaseHTTPRequestHandler):
         self.wfile.write(json.dumps(response).encode())
 
 
-server = HTTPServer(("0.0.0.0", 8000), AppHandler)
+def main():
+    server = HTTPServer(("0.0.0.0", 8000), AppHandler)
+    print("Application running on port 8000", flush=True)
+    server.serve_forever()
 
-print("Application running on port 8000", flush=True)
-server.serve_forever()
+
+if __name__ == "__main__":
+    main()
