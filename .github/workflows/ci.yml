@@ -24,3 +24,6 @@ jobs:
 
       - name: Run automated tests
         run: python -m unittest -v test_app
+
+      - name: Build Docker image
+        run: docker build -t deployment-demo:ci .
